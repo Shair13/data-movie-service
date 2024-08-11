@@ -1,6 +1,7 @@
 package com.shair13.data_service.service;
 
 import com.shair13.data_service.entity.Movie;
+import com.shair13.data_service.exception.MovieNotFoundException;
 import com.shair13.data_service.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,7 +26,7 @@ public class MovieService {
     }
 
     public Movie getById(Long id) {
-        return movieRepository.findById(id).orElseThrow(RuntimeException::new);
+        return movieRepository.findById(id).orElseThrow(() -> new MovieNotFoundException(id));
     }
 
     public Movie update(Long id, Movie updatedMovie) {
