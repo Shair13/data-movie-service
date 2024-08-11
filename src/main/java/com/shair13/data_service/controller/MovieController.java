@@ -4,7 +4,6 @@ import com.shair13.data_service.dto.PagedMovie;
 import com.shair13.data_service.entity.Movie;
 import com.shair13.data_service.service.MovieService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
