@@ -1,5 +1,6 @@
 package com.shair13.data_service.controller;
 
+import com.shair13.data_service.dto.PagedMovie;
 import com.shair13.data_service.entity.Movie;
 import com.shair13.data_service.service.MovieService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class MovieController {
     }
 
     @GetMapping
-    public Page<Movie> getAllMovies(
+    public PagedMovie getAllMovies(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy) {
@@ -37,7 +38,7 @@ public class MovieController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteMovie(@PathVariable Long id) {
-        movieService.delete(id);
+    public Movie deleteMovie(@PathVariable Long id) {
+       return movieService.delete(id);
     }
 }

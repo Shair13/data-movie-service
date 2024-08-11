@@ -1,7 +1,8 @@
 package com.shair13.data_service.service;
 
+import com.shair13.data_service.dto.PagedMovie;
 import com.shair13.data_service.entity.Movie;
-import com.shair13.data_service.exception.MovieNotFoundException;
+import com.shair13.data_service.mapper.MovieMapper;
 import com.shair13.data_service.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,28 +16,36 @@ import org.springframework.stereotype.Service;
 public class MovieService {
 
     private final MovieRepository movieRepository;
+    private final MovieMapper movieMapper;
 
     public Movie save(Movie movie) {
         return movieRepository.save(movie);
     }
 
-    public Page<Movie> getAll(int page, int size, String sortBy) {
+    public PagedMovie getAll(int page, int size, String sortBy) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-        return movieRepository.findAll(pageable);
+        Page<Movie> result = movieRepository.findAll(pageable);
+        return movieMapper.pageToPagedMovie(result);
     }
 
     public Movie getById(Long id) {
-        return movieRepository.findById(id).orElseThrow(() -> new MovieNotFoundException(id));
+        return movieRepository.findById(id).orElse(null);
     }
 
-    public Movie update(Long id, Movie updatedMovie) {
-        Movie movie = getById(id);
-        movie.updateMovie(updatedMovie);
-        return movieRepository.save(movie);
+    public Movie update(Long id, Movie movie) {
+        if (movieRepository.existsById(id)) {
+            movie.setId(id);
+            return movieRepository.save(movie);
+        }
+        return null;
     }
 
-    public void delete(Long id) {
-        Movie movie = getById(id);
-        movieRepository.delete(movie);
+    public Movie delete(Long id) {
+        if (movieRepository.existsById(id)) {
+            Movie movie = getById(id);
+            movieRepository.deleteById(id);
+            return movie;
+        }
+        return null;
     }
 }
