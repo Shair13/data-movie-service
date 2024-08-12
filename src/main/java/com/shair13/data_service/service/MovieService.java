@@ -2,6 +2,7 @@ package com.shair13.data_service.service;
 
 import com.shair13.data_service.dto.PagedMovie;
 import com.shair13.data_service.entity.Movie;
+import com.shair13.data_service.exception.MovieNotFoundException;
 import com.shair13.data_service.mapper.MovieMapper;
 import com.shair13.data_service.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,8 @@ public class MovieService {
     }
 
     public Movie getById(Long id) {
-        return movieRepository.findById(id).orElse(null);
+        return movieRepository.findById(id)
+                .orElseThrow(() -> new MovieNotFoundException(id));
     }
 
     public Movie update(Long id, Movie movie) {
@@ -37,15 +39,14 @@ public class MovieService {
             movie.setId(id);
             return movieRepository.save(movie);
         }
-        return null;
+        throw new MovieNotFoundException(id);
     }
 
-    public Movie delete(Long id) {
+    public void delete(Long id) {
         if (movieRepository.existsById(id)) {
-            Movie movie = getById(id);
             movieRepository.deleteById(id);
-            return movie;
+        } else {
+            throw new MovieNotFoundException(id);
         }
-        return null;
     }
 }

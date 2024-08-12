@@ -3,7 +3,7 @@ CREATE TABLE movies (
                          title VARCHAR(255) NOT NULL,
                          director VARCHAR(255) NOT NULL,
                          description VARCHAR(500),
-                         rate DECIMAL(2, 1)
+                         rate DECIMAL(3, 1)
 );
 
 INSERT INTO movies (title, description, director, rate) VALUES
