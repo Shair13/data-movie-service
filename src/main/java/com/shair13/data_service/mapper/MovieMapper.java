@@ -1,5 +1,7 @@
 package com.shair13.data_service.mapper;
 
+import com.shair13.data_service.dto.WriteMovieDto;
+import com.shair13.data_service.dto.ReadMovieDto;
 import com.shair13.data_service.dto.PagedMovie;
 import com.shair13.data_service.entity.Movie;
 import org.mapstruct.Mapper;
@@ -16,4 +18,6 @@ public interface MovieMapper {
     @Mapping(source = "number", target = "pageNumber")
     @Mapping(source = "size", target = "pageSize")
     PagedMovie pageToPagedMovie(Page<Movie> page);
+    Movie toDomain(WriteMovieDto writeMovieDto);
+    ReadMovieDto toReadDto(Movie movie);
 }

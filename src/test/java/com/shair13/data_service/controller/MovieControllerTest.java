@@ -165,7 +165,7 @@ class MovieControllerTest {
         movieRepository.save(new Movie(-1L, "Król Lew", "Christopher Nolan", "Description 1", 10.0));
 
         // when
-        MvcResult mvcResult = mockMvc.perform(get("/movies/search?title=" + title + "&director=" + director + "&rate-gt=" + rateGreaterThan))
+        MvcResult mvcResult = mockMvc.perform(get("/movies?title=" + title + "&director=" + director + "&rate-gt=" + rateGreaterThan))
                 .andExpect(status().is(200))
                 .andReturn();
         PagedMovie result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), PagedMovie.class);

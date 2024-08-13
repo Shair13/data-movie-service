@@ -1,6 +1,8 @@
 package com.shair13.data_service.service;
 
 import com.shair13.data_service.dto.PagedMovie;
+import com.shair13.data_service.dto.ReadMovieDto;
+import com.shair13.data_service.dto.WriteMovieDto;
 import com.shair13.data_service.entity.Movie;
 import com.shair13.data_service.exception.MovieNotFoundException;
 import com.shair13.data_service.mapper.MovieMapper;
@@ -16,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MovieServiceTest {
@@ -36,16 +38,17 @@ class MovieServiceTest {
     void shouldSave() {
         // given
         Movie movie = new Movie(-1L, TITLE, DIRECTOR, DESCRIPTION, RATE);
+        WriteMovieDto writeMovieDto = new WriteMovieDto(TITLE, DIRECTOR, DESCRIPTION, RATE);
+        ReadMovieDto readMovieDto = new ReadMovieDto(-1L, TITLE, DIRECTOR, DESCRIPTION, RATE);
         when(mockMovieRepository.save(movie)).thenReturn(movie);
+        when(movieMapper.toDomain(writeMovieDto)).thenReturn(movie);
+        when(movieMapper.toReadDto(movie)).thenReturn(readMovieDto);
 
         // when
-        Movie result = movieService.save(movie);
+        ReadMovieDto result = movieService.save(writeMovieDto);
 
         // then
-        assertEquals(TITLE, result.getTitle());
-        assertEquals(DIRECTOR, result.getDirector());
-        assertEquals(DESCRIPTION, result.getDescription());
-        assertEquals(RATE, result.getRate());
+        assertEquals(readMovieDto, result);
     }
 
     @Test
@@ -63,11 +66,11 @@ class MovieServiceTest {
         Page<Movie> moviePage = new PageImpl<>(List.of(movieOne, movieTwo), pageable, 2);
         PagedMovie pagedMovie = new PagedMovie(movies, page, size, 2, 1, true);
 
-        when(mockMovieRepository.findAll(pageable)).thenReturn(moviePage);
+        when(mockMovieRepository.search("", "", 0.0, pageable)).thenReturn(moviePage);
         when(movieMapper.pageToPagedMovie(moviePage)).thenReturn(pagedMovie);
 
         // when
-        PagedMovie result = movieService.getAll(page, size, sortBy);
+        PagedMovie result = movieService.search(page, size, sortBy, "", "", 0.0);
 
         // then
         assertEquals(movies.size(), result.getMovies().size());
@@ -80,17 +83,15 @@ class MovieServiceTest {
         // given
         Long id = 1L;
         Movie movie = new Movie(id, TITLE, DIRECTOR, DESCRIPTION, RATE);
+        ReadMovieDto readMovieDto = new ReadMovieDto(id, TITLE, DIRECTOR, DESCRIPTION, RATE);
         when(mockMovieRepository.findById(id)).thenReturn(Optional.of(movie));
+        when(movieMapper.toReadDto(movie)).thenReturn(readMovieDto);
 
         // when
-        Movie result = movieService.getById(id);
+        ReadMovieDto result = movieService.getById(id);
 
         // then
-        assertEquals(id, result.getId());
-        assertEquals(TITLE, result.getTitle());
-        assertEquals(DIRECTOR, result.getDirector());
-        assertEquals(DESCRIPTION, result.getDescription());
-        assertEquals(RATE, result.getRate());
+        assertEquals(readMovieDto, result);
     }
 
     @Test
@@ -111,29 +112,27 @@ class MovieServiceTest {
         // given
         Long id = 1L;
         Movie movie = new Movie(id, TITLE, DIRECTOR, DESCRIPTION, RATE);
-        when(mockMovieRepository.existsById(id)).thenReturn(true);
-        when(mockMovieRepository.save(movie)).thenReturn(movie);
+        WriteMovieDto writeMovieDto = new WriteMovieDto(TITLE, DIRECTOR, DESCRIPTION, RATE);
+        ReadMovieDto readMovieDto = new ReadMovieDto(id, TITLE, DIRECTOR, DESCRIPTION, RATE);
+        when(mockMovieRepository.findById(id)).thenReturn(Optional.of(movie));
+        when(movieMapper.toReadDto(movie)).thenReturn(readMovieDto);
 
         // when
-        Movie result = movieService.update(id, movie);
+        ReadMovieDto result = movieService.update(id, writeMovieDto);
 
         // then
-        assertEquals(id, result.getId());
-        assertEquals(TITLE, result.getTitle());
-        assertEquals(DIRECTOR, result.getDirector());
-        assertEquals(DESCRIPTION, result.getDescription());
-        assertEquals(RATE, result.getRate());
+        assertEquals(readMovieDto, result);
     }
+
     @Test
     void update_shouldThrowMovieNotFoundException() {
         // given
         Long id = 1L;
-        Movie movie = new Movie(id, TITLE, DIRECTOR, DESCRIPTION, RATE);
-        when(mockMovieRepository.existsById(id)).thenReturn(false);
+        WriteMovieDto writeMovieDto = new WriteMovieDto(TITLE, DIRECTOR, DESCRIPTION, RATE);
 
         // when
         MovieNotFoundException thrown = assertThrows(MovieNotFoundException.class,
-                () -> movieService.update(id, movie));
+                () -> movieService.update(id, writeMovieDto));
 
         // then
         assertTrue(thrown.getMessage().contains("Movie with id = " + id + " not found"));
@@ -143,7 +142,6 @@ class MovieServiceTest {
     void delete_shouldThrowMovieNotFoundException() {
         // given
         Long id = 1L;
-        when(mockMovieRepository.existsById(id)).thenReturn(false);
 
         // when
         MovieNotFoundException thrown = assertThrows(MovieNotFoundException.class,
