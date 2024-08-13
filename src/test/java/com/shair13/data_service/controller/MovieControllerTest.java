@@ -111,10 +111,11 @@ class MovieControllerTest {
     @Test
     @Transactional
     void getAllMovies_getOnePerPage() throws Exception {
-        // given + when
+        // given
         movieRepository.save(new Movie(-1L, "New Hope", "George Lucas", "Description 1", 10.0));
         movieRepository.save(new Movie(-1L, "Inception", "Christopher Nolan", "Description 2", 10.0));
 
+        // when
         MvcResult mvcResult = mockMvc.perform(get("/movies?size=1"))
                 .andExpect(status().is(200))
                 .andReturn();
@@ -151,6 +152,38 @@ class MovieControllerTest {
                 .andExpect(jsonPath("$.error", Matchers.containsString("Movie with id = " + id + " not found")));
     }
 
+    @Test
+    @Transactional
+    void shouldSearchMovie() throws Exception {
+        // given
+        String title = "incep";
+        String director = "nolan";
+        double rateGreaterThan = 7.0;
+        movieRepository.save(new Movie(-1L, "Inception", "Christopher Nolan", "Description 1", 10.0));
+        movieRepository.save(new Movie(-1L, "Inception", "Władysław Jagiełlo", "Description 1", 10.0));
+        movieRepository.save(new Movie(-1L, "Inception", "Christopher Nolan", "Description 1", 4.0));
+        movieRepository.save(new Movie(-1L, "Król Lew", "Christopher Nolan", "Description 1", 10.0));
+
+        // when
+        MvcResult mvcResult = mockMvc.perform(get("/movies/search?title=" + title + "&director=" + director + "&rate-gt=" + rateGreaterThan))
+                .andExpect(status().is(200))
+                .andReturn();
+        PagedMovie result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), PagedMovie.class);
+
+        // then
+        assertEquals(1, result.getMovies().size());
+    }
+
+    @Test
+    @Transactional
+    void searchMovie_shouldReturnBadRequestWhenRateIsInvalid() throws Exception {
+        // given
+        String invalidRate = "bb";
+
+        // when + then
+        mockMvc.perform(get("/movies/search?rate-gt=" + invalidRate))
+                .andExpect(status().isBadRequest());
+    }
 
     @Test
     @Transactional

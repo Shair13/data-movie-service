@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class MovieService {
@@ -32,6 +34,12 @@ public class MovieService {
     public Movie getById(Long id) {
         return movieRepository.findById(id)
                 .orElseThrow(() -> new MovieNotFoundException(id));
+    }
+
+    public PagedMovie search(int page, int size, String sortBy, String title, String director, Double rateGreaterThan) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Movie> result = movieRepository.findByTitleContainingIgnoreCaseAndDirectorContainingIgnoreCaseAndRateGreaterThan(title, director, rateGreaterThan, pageable);
+        return movieMapper.pageToPagedMovie(result);
     }
 
     public Movie update(Long id, Movie movie) {
