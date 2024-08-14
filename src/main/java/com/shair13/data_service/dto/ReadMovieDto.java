@@ -1,9 +1,9 @@
 package com.shair13.data_service.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @AllArgsConstructor
 public class ReadMovieDto {
     private Long id;

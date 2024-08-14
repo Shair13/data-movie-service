@@ -21,17 +21,17 @@ public class MovieController {
     private final MovieService movieService;
 
     @PostMapping
-    public ReadMovieDto addMovie(@RequestBody @Valid WriteMovieDto writeMovieDto) {
+    ReadMovieDto addMovie(@RequestBody @Valid WriteMovieDto writeMovieDto) {
         return movieService.save(writeMovieDto);
     }
 
     @GetMapping("/{id}")
-    public ReadMovieDto getMovieById(@PathVariable Long id) {
+    ReadMovieDto getMovieById(@PathVariable Long id) {
         return movieService.getById(id);
     }
 
     @GetMapping
-    public PagedMovie searchMovie(
+    PagedMovie searchMovie(
             @RequestParam(required = false) @Min(0) Integer page,
             @RequestParam(required = false) @Min(1) Integer size,
             @RequestParam(required = false, name = "sort-by") @Pattern(regexp = "id|title|director|description|rate") String sortBy,
@@ -45,12 +45,12 @@ public class MovieController {
     }
 
     @PutMapping("/{id}")
-    public ReadMovieDto updateMovie(@PathVariable Long id, @RequestBody @Valid WriteMovieDto writeMovieDto) {
+    ReadMovieDto updateMovie(@PathVariable Long id, @RequestBody @Valid WriteMovieDto writeMovieDto) {
         return movieService.update(id, writeMovieDto);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteMovie(@PathVariable Long id) {
+    void deleteMovie(@PathVariable Long id) {
         movieService.delete(id);
     }
 }
