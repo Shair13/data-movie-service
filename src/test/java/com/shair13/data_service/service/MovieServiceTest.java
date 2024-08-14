@@ -1,5 +1,8 @@
 package com.shair13.data_service.service;
 
+import com.shair13.data_service.dao.MovieSearchDao;
+import com.shair13.data_service.dao.PageDetails;
+import com.shair13.data_service.dao.SearchRequest;
 import com.shair13.data_service.dto.PagedMovie;
 import com.shair13.data_service.dto.ReadMovieDto;
 import com.shair13.data_service.dto.WriteMovieDto;
@@ -12,7 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +32,9 @@ class MovieServiceTest {
     @Mock
     private MovieRepository mockMovieRepository;
     @Mock
-    private MovieMapper movieMapper;
+    private MovieMapper mockMovieMapper;
+    @Mock
+    private MovieSearchDao mockMovieSearch;
     @InjectMocks
     private MovieService movieService;
 
@@ -41,8 +45,8 @@ class MovieServiceTest {
         WriteMovieDto writeMovieDto = new WriteMovieDto(TITLE, DIRECTOR, DESCRIPTION, RATE);
         ReadMovieDto readMovieDto = new ReadMovieDto(-1L, TITLE, DIRECTOR, DESCRIPTION, RATE);
         when(mockMovieRepository.save(movie)).thenReturn(movie);
-        when(movieMapper.toDomain(writeMovieDto)).thenReturn(movie);
-        when(movieMapper.toReadDto(movie)).thenReturn(readMovieDto);
+        when(mockMovieMapper.toDomain(writeMovieDto)).thenReturn(movie);
+        when(mockMovieMapper.toReadDto(movie)).thenReturn(readMovieDto);
 
         // when
         ReadMovieDto result = movieService.save(writeMovieDto);
@@ -56,21 +60,25 @@ class MovieServiceTest {
         // given
         int page = 0;
         int size = 10;
-        String sortBy = "title";
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        String sortBy = "id";
+        PageDetails pageDetails = PageDetails.create(page, size, sortBy);
+        SearchRequest searchRequest = new SearchRequest(TITLE, DIRECTOR, DESCRIPTION, RATE);
 
         Movie movieOne = new Movie(-1L, TITLE, DIRECTOR, DESCRIPTION, RATE);
         Movie movieTwo = new Movie(-2L, TITLE + "2", DIRECTOR, DESCRIPTION, RATE);
         List<Movie> movies = List.of(movieOne, movieTwo);
 
-        Page<Movie> moviePage = new PageImpl<>(List.of(movieOne, movieTwo), pageable, 2);
-        PagedMovie pagedMovie = new PagedMovie(movies, page, size, 2, 1, true);
+        ReadMovieDto readMovieDtoOne = new ReadMovieDto(-1L, TITLE, DIRECTOR, DESCRIPTION, RATE);
+        ReadMovieDto readMovieDtoTwo = new ReadMovieDto(-2L, TITLE + "2", DIRECTOR, DESCRIPTION, RATE);
+        List<ReadMovieDto> readMovieDtoList = List.of(readMovieDtoOne, readMovieDtoTwo);
 
-        when(mockMovieRepository.search("", "", 0.0, pageable)).thenReturn(moviePage);
-        when(movieMapper.pageToPagedMovie(moviePage)).thenReturn(pagedMovie);
+        PagedMovie pagedMovie = new PagedMovie(readMovieDtoList, pageDetails.getPage(), pageDetails.getSize());
 
+        when(mockMovieSearch.searchByCriteria(searchRequest, pageDetails)).thenReturn(movies);
+        when(mockMovieMapper.toPagedMovie(movies, pageDetails)).thenReturn(pagedMovie);
         // when
-        PagedMovie result = movieService.search(page, size, sortBy, "", "", 0.0);
+
+        PagedMovie result = movieService.search(searchRequest, pageDetails);
 
         // then
         assertEquals(movies.size(), result.getMovies().size());
@@ -85,7 +93,7 @@ class MovieServiceTest {
         Movie movie = new Movie(id, TITLE, DIRECTOR, DESCRIPTION, RATE);
         ReadMovieDto readMovieDto = new ReadMovieDto(id, TITLE, DIRECTOR, DESCRIPTION, RATE);
         when(mockMovieRepository.findById(id)).thenReturn(Optional.of(movie));
-        when(movieMapper.toReadDto(movie)).thenReturn(readMovieDto);
+        when(mockMovieMapper.toReadDto(movie)).thenReturn(readMovieDto);
 
         // when
         ReadMovieDto result = movieService.getById(id);
@@ -115,7 +123,7 @@ class MovieServiceTest {
         WriteMovieDto writeMovieDto = new WriteMovieDto(TITLE, DIRECTOR, DESCRIPTION, RATE);
         ReadMovieDto readMovieDto = new ReadMovieDto(id, TITLE, DIRECTOR, DESCRIPTION, RATE);
         when(mockMovieRepository.findById(id)).thenReturn(Optional.of(movie));
-        when(movieMapper.toReadDto(movie)).thenReturn(readMovieDto);
+        when(mockMovieMapper.toReadDto(movie)).thenReturn(readMovieDto);
 
         // when
         ReadMovieDto result = movieService.update(id, writeMovieDto);

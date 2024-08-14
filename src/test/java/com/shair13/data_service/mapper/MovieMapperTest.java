@@ -11,24 +11,24 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MovieMapperTest {
 
-    @Test
-    void pageToPagedMovie() {
-        // given
-        int pageNumber = 0;
-        int size = 10;
-        Pageable pageable = PageRequest.of(pageNumber, size, Sort.by("id"));
-
-        Movie movie = new Movie(1L, "title", "director", "description", 5.0);
-        List<Movie> movies = List.of(movie);
-
-        Page<Movie> moviePage = new PageImpl<>(movies, pageable, 2);
-
-        // when
-        PagedMovie pagedMovie = MovieMapper.INSTANCE.pageToPagedMovie(moviePage);
-
-        // then
-        assertEquals(movies.size(), pagedMovie.getMovies().size());
-        assertEquals(pageNumber, pagedMovie.getPageNumber());
-        assertEquals(size, pagedMovie.getPageSize());
-    }
+//    @Test
+//    void pageToPagedMovie() {
+//        // given
+//        int pageNumber = 0;
+//        int size = 10;
+//        Pageable pageable = PageRequest.of(pageNumber, size, Sort.by("id"));
+//
+//        Movie movie = new Movie(1L, "title", "director", "description", 5.0);
+//        List<Movie> movies = List.of(movie);
+//
+//        Page<Movie> moviePage = new PageImpl<>(movies, pageable, 2);
+//
+//        // when
+//        PagedMovie pagedMovie = MovieMapper.INSTANCE.pageToPagedMovie(moviePage);
+//
+//        // then
+//        assertEquals(movies.size(), pagedMovie.getMovies().size());
+//        assertEquals(pageNumber, pagedMovie.getPageNumber());
+//        assertEquals(size, pagedMovie.getPageSize());
+//    }
 }

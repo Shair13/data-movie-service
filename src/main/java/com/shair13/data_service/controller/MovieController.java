@@ -1,5 +1,7 @@
 package com.shair13.data_service.controller;
 
+import com.shair13.data_service.dao.PageDetails;
+import com.shair13.data_service.dao.SearchRequest;
 import com.shair13.data_service.dto.PagedMovie;
 import com.shair13.data_service.dto.ReadMovieDto;
 import com.shair13.data_service.dto.WriteMovieDto;
@@ -30,13 +32,16 @@ public class MovieController {
 
     @GetMapping
     public PagedMovie searchMovie(
-            @RequestParam(defaultValue = "0") @Min(0) int page,
-            @RequestParam(defaultValue = "10") @Min(1) int size,
-            @RequestParam(defaultValue = "id", name = "sort-by") @Pattern(regexp = "id|title|director|rate") String sortBy,
-            @RequestParam(defaultValue = "") String title,
-            @RequestParam(defaultValue = "") String director,
-            @RequestParam(defaultValue = "0", name = "rate-gt") @Min(0) @Max(10) Double rateGreaterThan) {
-        return movieService.search(page, size, sortBy, title, director, rateGreaterThan);
+            @RequestParam(required = false) @Min(0) Integer page,
+            @RequestParam(required = false) @Min(1) Integer size,
+            @RequestParam(required = false, name = "sort-by") @Pattern(regexp = "id|title|director|description|rate") String sortBy,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String director,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false, name = "rate-gt") @Min(0) @Max(10) Double rateGreaterThan) {
+        SearchRequest searchRequest = new SearchRequest(title, director, description, rateGreaterThan);
+        PageDetails pageDetails = PageDetails.create(page, size, sortBy);
+        return movieService.search(searchRequest, pageDetails);
     }
 
     @PutMapping("/{id}")

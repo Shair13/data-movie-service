@@ -26,9 +26,9 @@ public class Movie {
     private String description;
     @Min(1)
     @Max(10)
-    private double rate;
+    private Double rate;
 
-    public void update(WriteMovieDto writeMovieDto){
+    public void update(WriteMovieDto writeMovieDto) {
         title = writeMovieDto.getTitle();
         director = writeMovieDto.getDirector();
         description = writeMovieDto.getDescription();
