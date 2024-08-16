@@ -6,6 +6,7 @@ import com.shair13.data_service.dto.ReadMovieDto;
 import com.shair13.data_service.dto.WriteMovieDto;
 import com.shair13.data_service.entity.Movie;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public interface MovieMapper {
 
     PagedMovie toPagedMovie(List<Movie> movies, PageDetails pageDetails);
 
+    @Mapping(target = "id", ignore = true)
     Movie toDomain(WriteMovieDto writeMovieDto);
 
     ReadMovieDto toReadDto(Movie movie);
