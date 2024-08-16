@@ -19,4 +19,4 @@ EXPOSE 8081
 
 WORKDIR /opt/app
 
-CMD java -jar data-service-0.0.1-SNAPSHOT.jar
+CMD java -Xms150m -Xmx250m -jar data-service-0.0.1-SNAPSHOT.jar
