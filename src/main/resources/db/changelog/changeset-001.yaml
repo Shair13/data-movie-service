@@ -1,0 +1,206 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: shair13
+      changes:
+        - createTable:
+            tableName: movies
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: title
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: director
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(500)
+              - column:
+                  name: rate
+                  type: decimal(3,1)
+
+        - insert:
+            tableName: movies
+            columns:
+              - column:
+                  name: title
+                  value: 'Return of the Jedi'
+              - column:
+                  name: description
+                  value: 'The film follows the ongoing struggle between the malevolent Galactic Empire and the freedom fighters of the Rebel Alliance. As the Rebels attempt to destroy the Empire''s second Death Star, Luke Skywalker tries to bring his father, Darth Vader, back from the dark side of the Force.'
+              - column:
+                  name: director
+                  value: 'Richard Marquand'
+              - column:
+                  name: rate
+                  valueNumeric: 8.1
+
+        - insert:
+            tableName: movies
+            columns:
+              - column:
+                  name: title
+                  value: 'Interstellar'
+              - column:
+                  name: description
+                  value: 'Set in a dystopian future where Earth is suffering from catastrophic blight and famine, the film follows a group of astronauts who travel through a wormhole near Saturn in search of a new home for humankind.'
+              - column:
+                  name: director
+                  value: 'Christopher Nolan'
+              - column:
+                  name: rate
+                  valueNumeric: 8.0
+
+        - insert:
+            tableName: movies
+            columns:
+              - column:
+                  name: title
+                  value: 'Rubber (2010)'
+              - column:
+                  name: description
+                  value: 'A homicidal car tire, discovering it has destructive psionic power, sets its sights on a desert town once a mysterious woman becomes its obsession.'
+              - column:
+                  name: director
+                  value: 'Quentin Dupieux'
+              - column:
+                  name: rate
+                  valueNumeric: 5.2
+
+        - insert:
+            tableName: movies
+            columns:
+              - column:
+                  name: title
+                  value: 'The Return of the King'
+              - column:
+                  name: description
+                  value: 'Gandalf and Aragorn lead the World of Men against Sauron''s army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.'
+              - column:
+                  name: director
+                  value: 'Peter Jackson'
+              - column:
+                  name: rate
+                  valueNumeric: 8.4
+
+        - insert:
+            tableName: movies
+            columns:
+              - column:
+                  name: title
+                  value: 'Tenet'
+              - column:
+                  name: description
+                  value: 'Armed with only the word "Tenet," and fighting for the survival of the entire world, CIA operative, The Protagonist, journeys through a twilight world of international espionage on a global mission that unfolds beyond real time.'
+              - column:
+                  name: director
+                  value: 'Christopher Nolan'
+              - column:
+                  name: rate
+                  valueNumeric: 6.7
+
+        - insert:
+            tableName: movies
+            columns:
+              - column:
+                  name: title
+                  value: 'Inception'
+              - column:
+                  name: description
+                  value: 'A corporate spy who steals secrets via a technology that allows him to enter people''s dreams. The film turns on this character''s attempt to move past the boundaries of the technology in order to actually plant an idea in a dreamer''s head.'
+              - column:
+                  name: director
+                  value: 'Christopher Nolan'
+              - column:
+                  name: rate
+                  valueNumeric: 8.2
+
+        - insert:
+            tableName: movies
+            columns:
+              - column:
+                  name: title
+                  value: 'Rise of Skywalker'
+              - column:
+                  name: description
+                  value: 'Set one year after The Last Jedi, The Rise of Skywalker follows Rey and... Nevermind... Just turn it off.'
+              - column:
+                  name: director
+                  value: 'J.J. Abrams'
+              - column:
+                  name: rate
+                  valueNumeric: 1.8
+
+        - insert:
+            tableName: movies
+            columns:
+              - column:
+                  name: title
+                  value: 'The Hateful Eight'
+              - column:
+                  name: description
+                  value: 'The Hateful Eight is a 2015 American western thriller movie written and directed by Quentin Tarantino. It is about eight violent people who, during a blizzard, meet in a inn and learn they may have reasons to fight each other.'
+              - column:
+                  name: director
+                  value: 'Quentin Tarantino'
+              - column:
+                  name: rate
+                  valueNumeric: 7.7
+
+        - insert:
+            tableName: movies
+            columns:
+              - column:
+                  name: title
+                  value: 'How to Train Your Dragon'
+              - column:
+                  name: description
+                  value: 'A hapless young Viking who aspires to hunt dragons becomes the unlikely friend of a young dragon himself, and learns there may be more to the creatures than he assumed.'
+              - column:
+                  name: director
+                  value: 'Dean DeBlois, Chris Sanders'
+              - column:
+                  name: rate
+                  valueNumeric: 7.9
+
+        - insert:
+            tableName: movies
+            columns:
+              - column:
+                  name: title
+                  value: 'Tangled'
+              - column:
+                  name: description
+                  value: 'Tangled tells the story of Rapunzel, a lost young princess with magical long blonde hair who yearns to leave her secluded tower. She accepts the aid of an intruder, the outlaw Flynn Rider, to take her out into the world which she has never seen.'
+              - column:
+                  name: director
+                  value: 'Nathan Greno, Byron Howard'
+              - column:
+                  name: rate
+                  valueNumeric: 7.6
+
+        - insert:
+            tableName: movies
+            columns:
+              - column:
+                  name: title
+                  value: 'Inglourious Basterds'
+              - column:
+                  name: description
+                  value: 'The film tells an alternate history story of two converging plots to assassinate Nazi Germany''s leadership at a Paris cinema—one through a British operation largely carried out by a team of Jewish American soldiers led by First Lieutenant Aldo Raine '
+              - column:
+                  name: director
+                  value: 'Quentin Tarantino, Eli Roth'
+              - column:
+                  name: rate
+                  valueNumeric: 8.0
