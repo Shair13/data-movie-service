@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "movies")
 public class Movie {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,9 +28,9 @@ public class Movie {
     private Double rate;
 
     public void update(WriteMovieDto writeMovieDto) {
-        title = writeMovieDto.getTitle();
-        director = writeMovieDto.getDirector();
-        description = writeMovieDto.getDescription();
-        rate = writeMovieDto.getRate();
+        title = writeMovieDto.title();
+        director = writeMovieDto.director();
+        description = writeMovieDto.description();
+        rate = writeMovieDto.rate();
     }
 }

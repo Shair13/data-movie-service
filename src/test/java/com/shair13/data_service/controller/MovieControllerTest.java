@@ -105,7 +105,7 @@ class MovieControllerTest {
         PagedMovie result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), PagedMovie.class);
 
         // then
-        assertEquals(2, result.getMovies().size());
+        assertEquals(2, result.movies().size());
     }
 
     @Test
@@ -122,7 +122,7 @@ class MovieControllerTest {
         PagedMovie result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), PagedMovie.class);
 
         // then
-        assertEquals(1, result.getMovies().size());
+        assertEquals(1, result.movies().size());
     }
 
     @Test
@@ -171,7 +171,7 @@ class MovieControllerTest {
         PagedMovie result = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), PagedMovie.class);
 
         // then
-        assertEquals(1, result.getMovies().size());
+        assertEquals(1, result.movies().size());
     }
 
     @Test

@@ -56,7 +56,7 @@ class MovieServiceTest {
     }
 
     @Test
-    void getAll() {
+    void shouldGetAll() {
         // given
         int page = 0;
         int size = 10;
@@ -81,9 +81,9 @@ class MovieServiceTest {
         PagedMovie result = movieService.search(searchRequest, pageDetails);
 
         // then
-        assertEquals(movies.size(), result.getMovies().size());
-        assertEquals(page, result.getPageDetails().getPage());
-        assertEquals(size, result.getPageDetails().getSize());
+        assertEquals(movies.size(), result.movies().size());
+        assertEquals(page, result.pageDetails().page());
+        assertEquals(size, result.pageDetails().size());
     }
 
     @Test

@@ -31,14 +31,14 @@ class MovieMapperTest {
         PagedMovie result = MovieMapper.INSTANCE.toPagedMovie(movies, pageDetails);
 
         //then
-        assertEquals(movies.size(), result.getMovies().size());
-        assertEquals(TITLE, result.getMovies().get(0).getTitle());
-        assertEquals(DIRECTOR, result.getMovies().get(0).getDirector());
-        assertEquals(DESCRIPTION, result.getMovies().get(0).getDescription());
-        assertEquals(RATE, result.getMovies().get(0).getRate());
-        assertEquals(pageDetails.getPage(), result.getPageDetails().getPage());
-        assertEquals(pageDetails.getSize(),  result.getPageDetails().getSize());
-        assertEquals(pageDetails.getSortBy(),  result.getPageDetails().getSortBy());
+        assertEquals(movies.size(), result.movies().size());
+        assertEquals(TITLE, result.movies().get(0).title());
+        assertEquals(DIRECTOR, result.movies().get(0).director());
+        assertEquals(DESCRIPTION, result.movies().get(0).description());
+        assertEquals(RATE, result.movies().get(0).rate());
+        assertEquals(pageDetails.page(), result.pageDetails().page());
+        assertEquals(pageDetails.size(),  result.pageDetails().size());
+        assertEquals(pageDetails.sortBy(),  result.pageDetails().sortBy());
     }
 
     @Test
@@ -50,11 +50,11 @@ class MovieMapperTest {
         ReadMovieDto result = MovieMapper.INSTANCE.toReadDto(movie);
 
         //then
-        assertEquals(ID, result.getId());
-        assertEquals(TITLE, result.getTitle());
-        assertEquals(DIRECTOR, result.getDirector());
-        assertEquals(DESCRIPTION, result.getDescription());
-        assertEquals(RATE, result.getRate());
+        assertEquals(ID, result.id());
+        assertEquals(TITLE, result.title());
+        assertEquals(DIRECTOR, result.director());
+        assertEquals(DESCRIPTION, result.description());
+        assertEquals(RATE, result.rate());
     }
 
     @Test
@@ -66,9 +66,9 @@ class MovieMapperTest {
         Movie result = MovieMapper.INSTANCE.toDomain(writeMovieDto);
 
         //then
-        assertEquals(writeMovieDto.getTitle(), result.getTitle());
-        assertEquals(writeMovieDto.getDirector(), result.getDirector());
-        assertEquals(writeMovieDto.getDescription(), result.getDescription());
-        assertEquals(writeMovieDto.getRate(), result.getRate());
+        assertEquals(writeMovieDto.title(), result.getTitle());
+        assertEquals(writeMovieDto.director(), result.getDirector());
+        assertEquals(writeMovieDto.description(), result.getDescription());
+        assertEquals(writeMovieDto.rate(), result.getRate());
     }
 }

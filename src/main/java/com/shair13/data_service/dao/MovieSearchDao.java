@@ -30,27 +30,27 @@ public class MovieSearchDao {
 
         Root<Movie> root = criteriaQuery.from(Movie.class);
 
-        if (request.getTitle() != null) {
+        if (request.title() != null) {
             Predicate titlePredicate = criteriaBuilder
-                    .like(criteriaBuilder.lower(root.get("title")), "%" + request.getTitle().toLowerCase() + "%");
+                    .like(criteriaBuilder.lower(root.get("title")), "%" + request.title().toLowerCase() + "%");
             predicates.add(titlePredicate);
         }
 
-        if (request.getDirector() != null) {
+        if (request.director() != null) {
             Predicate directorPredicate = criteriaBuilder
-                    .like(criteriaBuilder.lower(root.get("director")), "%" + request.getDirector().toLowerCase() + "%");
+                    .like(criteriaBuilder.lower(root.get("director")), "%" + request.director().toLowerCase() + "%");
             predicates.add(directorPredicate);
         }
 
-        if (request.getDescription() != null) {
+        if (request.description() != null) {
             Predicate descriptionPredicate = criteriaBuilder
-                    .like(criteriaBuilder.lower(root.get("description")), "%" + request.getDescription().toLowerCase() + "%");
+                    .like(criteriaBuilder.lower(root.get("description")), "%" + request.description().toLowerCase() + "%");
             predicates.add(descriptionPredicate);
         }
 
-        if (request.getRate() != null) {
+        if (request.rate() != null) {
             Predicate ratePredicate = criteriaBuilder
-                    .greaterThanOrEqualTo(root.get("rate"), request.getRate());
+                    .greaterThanOrEqualTo(root.get("rate"), request.rate());
             predicates.add(ratePredicate);
         }
 
@@ -59,13 +59,13 @@ public class MovieSearchDao {
                 criteriaBuilder.and(predicates.toArray(new Predicate[0]))
         );
         criteriaQuery.orderBy(
-                criteriaBuilder.asc(root.get(pageDetails.getSortBy()))
+                criteriaBuilder.asc(root.get(pageDetails.sortBy()))
         );
 
         TypedQuery<Movie> query = entityManager.createQuery(criteriaQuery);
 
-        query.setFirstResult(pageDetails.getPage() * pageDetails.getSize());
-        query.setMaxResults(pageDetails.getSize());
+        query.setFirstResult(pageDetails.page() * pageDetails.size());
+        query.setMaxResults(pageDetails.size());
 
         return query.getResultList();
     }
