@@ -1,6 +1,5 @@
 package com.shair13.data_service.controller;
 
-import com.shair13.data_service.dao.PageDetails;
 import com.shair13.data_service.dao.SearchRequest;
 import com.shair13.data_service.dto.PagedMovie;
 import com.shair13.data_service.dto.ReadMovieDto;
@@ -9,8 +8,8 @@ import com.shair13.data_service.service.MovieService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,16 +31,13 @@ public class MovieController {
 
     @GetMapping
     PagedMovie searchMovie(
-            @RequestParam(required = false) @Min(0) Integer page,
-            @RequestParam(required = false) @Min(1) Integer size,
-            @RequestParam(required = false, name = "sort-by") @Pattern(regexp = "id|title|director|description|rate") String sortBy,
+            Pageable pageable,
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String director,
             @RequestParam(required = false) String description,
             @RequestParam(required = false, name = "rate-gt") @Min(0) @Max(10) Double rateGreaterThan) {
         SearchRequest searchRequest = new SearchRequest(title, director, description, rateGreaterThan);
-        PageDetails pageDetails = PageDetails.create(page, size, sortBy);
-        return movieService.search(searchRequest, pageDetails);
+        return movieService.search(searchRequest, pageable);
     }
 
     @PutMapping("/{id}")

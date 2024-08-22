@@ -3,11 +3,10 @@ package com.shair13.data_service.dao;
 import com.shair13.data_service.entity.Movie;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ public class MovieSearchDao {
 
     public List<Movie> searchByCriteria(
             SearchRequest request,
-            PageDetails pageDetails
+            Pageable pageable
     ) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Movie> criteriaQuery = criteriaBuilder.createQuery(Movie.class);
@@ -54,18 +53,25 @@ public class MovieSearchDao {
             predicates.add(ratePredicate);
         }
 
-
         criteriaQuery.where(
                 criteriaBuilder.and(predicates.toArray(new Predicate[0]))
         );
-        criteriaQuery.orderBy(
-                criteriaBuilder.asc(root.get(pageDetails.sortBy()))
-        );
+
+        List<Order> orders = new ArrayList<>();
+        for (Sort.Order order : pageable.getSort()) {
+            if (order.isAscending()) {
+                orders.add(criteriaBuilder.asc(root.get(order.getProperty())));
+            } else {
+                orders.add(criteriaBuilder.desc(root.get(order.getProperty())));
+            }
+        }
+
+        criteriaQuery.orderBy(orders);
 
         TypedQuery<Movie> query = entityManager.createQuery(criteriaQuery);
 
-        query.setFirstResult(pageDetails.page() * pageDetails.size());
-        query.setMaxResults(pageDetails.size());
+        query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
+        query.setMaxResults(pageable.getPageSize());
 
         return query.getResultList();
     }

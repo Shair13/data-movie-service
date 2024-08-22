@@ -1,11 +1,12 @@
 package com.shair13.data_service.mapper;
 
-import com.shair13.data_service.dao.PageDetails;
 import com.shair13.data_service.dto.PagedMovie;
 import com.shair13.data_service.dto.ReadMovieDto;
 import com.shair13.data_service.dto.WriteMovieDto;
 import com.shair13.data_service.entity.Movie;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -25,10 +26,11 @@ class MovieMapperTest {
         Movie movieOne = new Movie(ID, TITLE, DIRECTOR, DESCRIPTION, RATE);
         Movie movieTwo = new Movie(2L, "title 2", "director 2", "description 2", 10.0);
         List<Movie> movies = List.of(movieOne, movieTwo);
-        PageDetails pageDetails = new PageDetails(0, 10, "id");
+
+        Pageable pageable = PageRequest.of(0, 5);
 
         //when
-        PagedMovie result = MovieMapper.INSTANCE.toPagedMovie(movies, pageDetails);
+        PagedMovie result = MovieMapper.INSTANCE.toPagedMovie(movies, pageable);
 
         //then
         assertEquals(movies.size(), result.movies().size());
@@ -36,9 +38,8 @@ class MovieMapperTest {
         assertEquals(DIRECTOR, result.movies().get(0).director());
         assertEquals(DESCRIPTION, result.movies().get(0).description());
         assertEquals(RATE, result.movies().get(0).rate());
-        assertEquals(pageDetails.page(), result.pageDetails().page());
-        assertEquals(pageDetails.size(),  result.pageDetails().size());
-        assertEquals(pageDetails.sortBy(),  result.pageDetails().sortBy());
+        assertEquals(pageable.getPageSize(), result.pageable().getPageSize());
+        assertEquals(pageable.getPageNumber(), result.pageable().getPageNumber());
     }
 
     @Test
