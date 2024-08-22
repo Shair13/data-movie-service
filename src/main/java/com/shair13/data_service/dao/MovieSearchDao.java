@@ -1,6 +1,7 @@
 package com.shair13.data_service.dao;
 
 import com.shair13.data_service.entity.Movie;
+import com.shair13.data_service.entity.Movie_;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
@@ -31,25 +32,25 @@ public class MovieSearchDao {
 
         if (request.title() != null) {
             Predicate titlePredicate = criteriaBuilder
-                    .like(criteriaBuilder.lower(root.get("title")), "%" + request.title().toLowerCase() + "%");
+                    .like(criteriaBuilder.lower(root.get(Movie_.title)), "%" + request.title().toLowerCase() + "%");
             predicates.add(titlePredicate);
         }
 
         if (request.director() != null) {
             Predicate directorPredicate = criteriaBuilder
-                    .like(criteriaBuilder.lower(root.get("director")), "%" + request.director().toLowerCase() + "%");
+                    .like(criteriaBuilder.lower(root.get(Movie_.director)), "%" + request.director().toLowerCase() + "%");
             predicates.add(directorPredicate);
         }
 
         if (request.description() != null) {
             Predicate descriptionPredicate = criteriaBuilder
-                    .like(criteriaBuilder.lower(root.get("description")), "%" + request.description().toLowerCase() + "%");
+                    .like(criteriaBuilder.lower(root.get(Movie_.description)), "%" + request.description().toLowerCase() + "%");
             predicates.add(descriptionPredicate);
         }
 
         if (request.rate() != null) {
             Predicate ratePredicate = criteriaBuilder
-                    .greaterThanOrEqualTo(root.get("rate"), request.rate());
+                    .greaterThanOrEqualTo(root.get(Movie_.rate), request.rate());
             predicates.add(ratePredicate);
         }
 
