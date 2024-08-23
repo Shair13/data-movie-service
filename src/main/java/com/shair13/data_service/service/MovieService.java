@@ -1,6 +1,7 @@
 package com.shair13.data_service.service;
 
 import com.shair13.data_service.dao.MovieSearchDao;
+import com.shair13.data_service.dao.PageDetails;
 import com.shair13.data_service.dao.SearchRequest;
 import com.shair13.data_service.dto.PagedMovie;
 import com.shair13.data_service.dto.ReadMovieDto;
@@ -36,7 +37,8 @@ public class MovieService {
 
     public PagedMovie search(SearchRequest searchRequest, Pageable pageable) {
         List<Movie> movies = movieSearch.searchByCriteria(searchRequest, pageable);
-        return movieMapper.toPagedMovie(movies, pageable);
+        PageDetails pageDetails = PageDetails.create(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort().toString());
+        return movieMapper.toPagedMovie(movies, pageDetails);
     }
 
     public ReadMovieDto update(Long id, WriteMovieDto writeMovieDto) {

@@ -1,5 +1,6 @@
 package com.shair13.data_service.mapper;
 
+import com.shair13.data_service.dao.PageDetails;
 import com.shair13.data_service.dto.PagedMovie;
 import com.shair13.data_service.dto.ReadMovieDto;
 import com.shair13.data_service.dto.WriteMovieDto;
@@ -27,10 +28,10 @@ class MovieMapperTest {
         Movie movieTwo = new Movie(2L, "title 2", "director 2", "description 2", 10.0);
         List<Movie> movies = List.of(movieOne, movieTwo);
 
-        Pageable pageable = PageRequest.of(0, 5);
+        PageDetails pageDetails = PageDetails.create(0, 10, "id");
 
         //when
-        PagedMovie result = MovieMapper.INSTANCE.toPagedMovie(movies, pageable);
+        PagedMovie result = MovieMapper.INSTANCE.toPagedMovie(movies, pageDetails);
 
         //then
         assertEquals(movies.size(), result.movies().size());
@@ -38,8 +39,8 @@ class MovieMapperTest {
         assertEquals(DIRECTOR, result.movies().get(0).director());
         assertEquals(DESCRIPTION, result.movies().get(0).description());
         assertEquals(RATE, result.movies().get(0).rate());
-        assertEquals(pageable.getPageSize(), result.pageable().getPageSize());
-        assertEquals(pageable.getPageNumber(), result.pageable().getPageNumber());
+        assertEquals(pageDetails.size(), result.pageDetails().size());
+        assertEquals(pageDetails.page(), result.pageDetails().page());
     }
 
     @Test

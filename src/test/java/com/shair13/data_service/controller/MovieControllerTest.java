@@ -94,7 +94,7 @@ class MovieControllerTest {
 
     @Test
     @Transactional
-    void getAllMovies() throws Exception {
+    void shouldGetAllMovies() throws Exception {
         // given + when
         movieRepository.save(new Movie(-1L, "New Hope", "George Lucas", "Description 1", 10.0));
         movieRepository.save(new Movie(-1L, "Inception", "Christopher Nolan", "Description 2", 10.0));
@@ -110,7 +110,7 @@ class MovieControllerTest {
 
     @Test
     @Transactional
-    void getAllMovies_getOnePerPage() throws Exception {
+    void shouldGetAllMovies_getOnePerPage() throws Exception {
         // given
         movieRepository.save(new Movie(-1L, "New Hope", "George Lucas", "Description 1", 10.0));
         movieRepository.save(new Movie(-1L, "Inception", "Christopher Nolan", "Description 2", 10.0));
@@ -144,7 +144,7 @@ class MovieControllerTest {
     @Transactional
     void shouldGetMovieById_shouldThrowMovieNotFoundException() throws Exception {
         // given
-        Long id = 13L;
+        long id = 13L;
 
         // when + then
         mockMvc.perform(get("/movies/" + id))
@@ -211,9 +211,9 @@ class MovieControllerTest {
 
     @Test
     @Transactional
-    void updateMovie_shouldThrowMovieNotFoundException() throws Exception {
+    void shouldUpdateMovie_shouldThrowMovieNotFoundException() throws Exception {
         // given
-        Long id = 13L;
+        long id = 13L;
         String jsonMovie = """
                 {
                 	"title": "Return of The Jedi",
